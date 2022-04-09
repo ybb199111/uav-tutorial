@@ -2,7 +2,7 @@
 %Rochester Institute of Technolgoy
 %Quadcopter Battery model
 clc
-clear all
+clear 
 close all
 fig=1;
 
@@ -29,9 +29,9 @@ Kt=Kemf;
 C=700; %mAh
 PD=120; %Peak Discharge
 CD=60; %Constant Dishcharge
-Amps=C/1000;
-Operating_current=Amps*CD; 
-Max_current=Amps*PD;
+Amps=C/1000;%
+Operating_current=Amps*CD; %
+Max_current=Amps*PD;%最大放电电流，0.7*120=84
 Volts=11.1;
 [Data,Header,raw]=xlsread('Continuous_2017-11-01_145046_10inc_0to2000andBack.csv');
 [M,I] = max(Data(:,12));
@@ -40,9 +40,9 @@ Voltage=Data(1:I,11);
 Current=Data(1:I,12);
 RPM=Data(1:I,14);
 Data=Data(1:I,:);
-
+%%
 sim('Battery_Motor')
-
+%%
 figure(fig)
 fig=fig+1;
 subplot(2,1,1)
@@ -54,7 +54,7 @@ plot(time,Current_)
 title('Experimental Battery Current')
 ylabel('Current(A)')
 xlabel('Time(s)')
-
+%%
 figure(fig)
 fig=fig+1;
 subplot(2,1,1)

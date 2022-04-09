@@ -5,7 +5,7 @@ fig=1;
 global Jr Ixx Iyy Izz b d l m g b_m R L 
 TF=10;
 
-% Quadrotor constants
+%% Quadrotor constants
 Ixx = 7.5*10^(-3);  % Quadrotor moment of inertia around X axis
 Iyy = 7.5*10^(-3);  % Quadrotor moment of inertia around Y axis
 Izz = 1.3*10^(-2);  % Quadrotor moment of inertia around Z axis
@@ -21,23 +21,26 @@ R=0.117; %Motor Resistance
 L=0.001*R; %Electric Inductance
 Kemf=0.00255; %Back electromotive force constant
 Kt=Kemf;
-tf1=tf([0.001993 3.111e7],[1 1004 8.304e4]);
+tf1=tf([0.001993 3.111e7],[1 1004 8.304e4]);%电机的传递函数
 %tf1=tf([-7.199e6 1.167e12], [1 8.579e4 3.115e9]);
 [Data,Header,raw]=xlsread('Continuous_2017-11-01_145046_10inc_0to2000andBack.csv');
 Data=Data(1000:end-1000,:);
+%%
+%力矩系数
 figure(fig)
 fig=fig+1;
-yyaxis left
-plot(Data(:,1),(-Data(:,9)./((Data(:,14)*2*pi/60).^2)));
-Ke_measured=median((-Data(:,9)./((Data(:,14)*2*pi/60).^2)));
+yyaxis left  %左边的y轴
+plot(Data(:,1),(-Data(:,9)./((Data(:,14)*2*pi/60).^2)));%
+Ke_measured=median((-Data(:,9)./((Data(:,14)*2*pi/60).^2)));%测量获得的力矩系数
 title('Torque coefficient')
 xlabel('Time(s)')
 ylabel('Coefficient')
 hold on
-yyaxis right
+yyaxis right  %右边的y轴
 plot(Data(:,1),0.001.*Data(:,10))
 ylabel('Thrust(kg)')
-
+%%
+%做力矩系数和拉力的点图
 figure(fig)
 fig=fig+1;
 for indx=1:1:length(Data(:,1))
@@ -48,12 +51,13 @@ xlabel('Thrust(kg)')
 ylabel('Coefficient(Nm/s^2)')
 title('Torque Coefficient')
 grid on
-
+%%
+%拉力系数
 figure(fig)
 fig=fig+1;
 yyaxis left
 plot(Data(:,1),(0.001*Data(:,10)./((Data(:,14)*2*pi/60).^2)));
-b_c=median(0.001*(Data(:,10)./((Data(:,14)*2*pi/60).^2)));
+b_c=median(0.001*(Data(:,10)./((Data(:,14)*2*pi/60).^2)));%拉力系数
 title('Thrust Coefficient')
 xlabel('Time(s)')
 ylabel('Coefficient(N/s^2)')
@@ -61,7 +65,8 @@ hold on
 yyaxis right
 plot(Data(:,1),0.001.*Data(:,10))
 ylabel('Thrust(kg)')
-
+%%
+%拉力系数和拉力点图
 figure(fig)
 fig=fig+1;
 for indx=1:1:length(Data(:,1))
@@ -72,12 +77,12 @@ xlabel('Thrust(kg)')
 ylabel('Coefficient(N/s^2)')
 title('Thrust Coefficient')
 grid on
-
+%%
 figure(fig)
 fig=fig+1;
 yyaxis left
 plot(Data(:,1),(-Data(:,9)./((Data(:,14)*2*pi/60))));
-b_damp=median((-Data(:,9)./((Data(:,14)*2*pi/60))));
+b_damp=median((-Data(:,9)./((Data(:,14)*2*pi/60))));%电机阻尼系数
 title('Motor damping coefficient')
 xlabel('Time(s)')
 ylabel('Coefficient')
@@ -85,7 +90,7 @@ hold on
 yyaxis right
 plot(Data(:,1),0.001.*Data(:,10))
 ylabel('Thrust(kg)')
-
+%%
 figure(fig)
 fig=fig+1;
 for indx=1:1:length(Data(:,1))
@@ -96,12 +101,12 @@ title('Motor Damping Coefficient')
 xlabel('Thrust(kg)')
 ylabel('Coefficient (Nm/A)')
 grid on
-
+%%
 figure(fig)
 fig=fig+1;
 yyaxis left
 plot(Data(:,1),(-Data(:,9)./(Data(:,12))));
-Kt=median((-Data(:,9)./(Data(:,12))));
+Kt=median((-Data(:,9)./(Data(:,12))));%电机力矩系数，单位Nm/A
 title('Motor Torque Coefficient')
 xlabel('Time(s)')
 ylabel('Coefficient')
@@ -109,7 +114,7 @@ hold on
 yyaxis right
 plot(Data(:,1),0.001.*Data(:,10))
 ylabel('Thrust(kg)')
-
+%%
 figure(fig)
 fig=fig+1;
 for indx=1:1:length(Data(:,1))
@@ -120,37 +125,37 @@ title('Motor Torque Coefficient')
 xlabel('Thrust(kg)')
 ylabel('Coefficient(Nms)')
 grid on
-
+%%
 sim('Motor_Dynamics')
-
+%%
 
 figure(fig)
 fig=fig+1;
-plot(time,Velocity)
+plot(time,Velocity)%simulink的仿真时间
 title('Motor Dynamics Angular Velocity Step Response')
 xlabel('Time(s)')
 ylabel('Angular Velocity (rad/s)')
-
+%%
 figure(fig)
 fig=fig+1;
 plot(time,Velocity)
 hold on
-step(tf1,'--r')
+step(tf1,'--r')%将实际数据与传递函数的结果进行对比
 title('Actual vs Estimated Step Response')
 ylabel('Velocity(rad/s)')
 legend('Actual','Transfer Function')
-
+%%
 figure(fig)
 fig=fig+1;
 margin(tf1)
 grid on
 title('Motor Model FRF')
-
+%%
 figure(fig)
 fig=fig+1;
 pzmap(tf1)
 title('Pole-Zero Map of Motor Model')
-
+%%
 figure(fig)
 fig=fig+1;
 rlocus(tf1)
@@ -167,7 +172,7 @@ title('Open loop bode plot')
 CL_Data=iddata(Output,Input,0.0001);
 CL_TF=arx(CL_Data,[2 1 1]);
 CL_TF=d2c(CL_TF,'Tustin');
-
+%%
 figure(fig)
 fig=fig+1;
 hold on
@@ -176,7 +181,7 @@ bode(CL_TF)
 grid on
 %legend('Open Loop Motor Plant Model','Closed Loop System')
 title('Closed loop bode plot')
-
+%%
 figure(fig)
 fig=fig+1;
 bode(OL_TF)
@@ -184,7 +189,7 @@ hold on
 grid on
 bode(CL_TF)
 
-
+%%
 figure(fig)
 fig=fig+1;
 plot(time1,Output)
@@ -194,7 +199,7 @@ title('Contolled Motor Dynamics')
 xlabel('Time(s)')
 ylabel('Angular Velocity (rad/s)')
 legend('Output','Input')
-
+%%
 figure(fig)
 fig=fig+1;
 plot(time,Output1)
@@ -204,7 +209,7 @@ title('Closed Loop System')
 xlabel('Time(s)')
 ylabel('Angular Velocity (rad/s)')
 legend('Output','Input')
-
+%%
 figure(fig)
 fig=fig+1;
 subplot(2,1,1)
@@ -217,7 +222,7 @@ axis([0 10 1900 2100])
 title('Motor Model Output')
 ylabel('Output Amplitude')
 xlabel('Time(s)')
-
+%%
 figure(fig)
 fig=fig+1;
 subplot(2,1,1)

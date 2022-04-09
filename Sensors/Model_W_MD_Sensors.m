@@ -38,7 +38,7 @@ X_dot_dot_bias=0;
 Y_dot_dot_bias=0;
 Z_dot_dot_bias=0;
 Grav_bias=g;
-
+%%
 sim('Plant_Model_W_Sensors_biased')
 Phi_dot_bias=mean(Phi_dot);
 Theta_dot_bias=mean(Theta_dot);
@@ -65,7 +65,7 @@ title('Accelerometer Bias Removal')
 xlabel('Time(s)')
 ylabel('Acceleration (m/s^2)')
 legend('Z Accel Biased','Y Accel Biased','X Accel Biased','Z Accel Unbiased','Y Accel Unbiased','X Accel Unbiased')
-
+%%
 figure(fig)
 fig=fig+1;
 subplot(2,1,1)
@@ -77,7 +77,7 @@ plot(time,Phi,time,Theta,time,Psi)
 title('Plant Angular Outputs')
 xlabel('Time(s)')
 ylabel('Angle(Rad)')
-
+%%
 figure(fig)
 fig=fig+1;
 subplot(2,1,1)
