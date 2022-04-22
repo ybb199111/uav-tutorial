@@ -5,7 +5,7 @@ clc
 clear all
 fig=1;
 global Jr Ixx Iyy Izz Ax Ay Az b d l m g b_m R L weight
-
+%%
 % Quadrotor constants
 Ixx = 7.5*10^(-3);  % Quadrotor moment of inertia around X axis
 Iyy = 7.5*10^(-3);  % Quadrotor moment of inertia around Y axis
@@ -23,6 +23,7 @@ m = weight/g;  % Mass of the Quadrotor in Kg
 b_m=2.415e-6; %Motor damping
 R=0.117; %Motor Resistance
 L=0.001*R; %Electric Inductance
+%%
 Kemf=0.00255; %Back electromotive force constant
 Kt=Kemf;
 C=700; %mAh
@@ -42,8 +43,9 @@ Y_dot_dot_bias=0;
 Z_dot_dot_bias=0;
 Grav_bias=g;
 set_param('Controlled_simulink_model','AlgebraicLoopSolver','LineSearch')
+%%
 sim('Controlled_simulink_model')
-
+%%
 figure(fig)
 fig=fig+1;
 plot(time,Z_d,time,Z,'--','LineWidth',2)

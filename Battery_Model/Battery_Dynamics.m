@@ -9,6 +9,7 @@ fig=1;
 fig=1;
 global Jr Ixx Iyy Izz b d l m g b_m R L Ke
 TF=10;
+%
 
 % Quadrotor constants
 Ixx = 7.5*10^(-3);  % Quadrotor moment of inertia around X axis
